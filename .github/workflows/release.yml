@@ -1,12 +1,20 @@
 name: Build Windows app
 
+# Builds the Windows .exe files on every push to main (download them from the
+# run's artifacts). When package.json has a version that has no release yet,
+# it also creates the vX.Y.Z tag and a GitHub Release with both .exe files.
 on:
   push:
-    tags: ['v*']
+    branches: [main]
+    paths-ignore: ['**.md']
   workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: windows-build-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   windows:
@@ -24,8 +32,22 @@ jobs:
           name: windows-exe
           path: release/*.exe
           if-no-files-found: error
-      - if: startsWith(github.ref, 'refs/tags/')
+
+      - name: Check whether this version is already released
+        id: ver
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          v="v$(node -p "require('./package.json').version")"
+          echo "tag=$v" >> "$GITHUB_OUTPUT"
+          if gh release view "$v" >/dev/null 2>&1; then echo "new=false" >> "$GITHUB_OUTPUT"; else echo "new=true" >> "$GITHUB_OUTPUT"; fi
+
+      - if: steps.ver.outputs.new == 'true'
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.ver.outputs.tag }}
+          name: ${{ steps.ver.outputs.tag }}
+          target_commitish: ${{ github.sha }}
           files: release/*.exe
           generate_release_notes: true

@@ -31,7 +31,7 @@ Updates come in automatically: after a new deploy, the next launch picks up the 
 The app is also packaged with Electron as a Windows desktop program.
 
 - **Download:** grab `Roadmap-Setup-<version>.exe` (installer) or `Roadmap-Portable-<version>.exe` (no install, just run) from the repo's **Releases** page.
-- **New release:** bump `version` in `package.json`, then push a matching tag, for example `git tag v1.0.1 && git push origin v1.0.1`. `.github/workflows/release.yml` builds on Windows and attaches both `.exe` files to a GitHub Release.
+- **New release:** bump `version` in `package.json` and push to `main`. `.github/workflows/release.yml` builds on Windows and, for a version with no release yet, creates the `vX.Y.Z` tag and a GitHub Release with both `.exe` files. Every push also leaves the `.exe` files as a downloadable artifact on the Actions run.
 - **Local build:** `npm run dist:win` on Windows (on macOS/Linux it needs Wine). Output goes to `release/`. `npm run electron` runs the desktop app without packaging. `npm run dist:mac` and `npm run dist:linux` build for those systems.
 
 The `.exe` isn't code-signed, so Windows SmartScreen warns the first time: click **More info → Run anyway**. The desktop app keeps its own progress, separate from the website's.
