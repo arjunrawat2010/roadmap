@@ -1,0 +1,62 @@
+# nginx config for serving the roadmap locally.
+# The deploy scripts fill in __PORT__ and __ROOT__ and write the result to
+# .nginx/conf/nginx.conf. Edit this template, not the generated file.
+
+worker_processes 1;
+error_log logs/error.log warn;
+pid       logs/nginx.pid;
+
+events {
+  worker_connections 256;
+}
+
+http {
+  include      mime.types;
+  default_type application/octet-stream;
+  access_log   logs/access.log;
+
+  # Keep temp files inside .nginx/ so nginx runs as a normal user.
+  client_body_temp_path temp/client_body;
+  proxy_temp_path       temp/proxy;
+  fastcgi_temp_path     temp/fastcgi;
+  uwsgi_temp_path       temp/uwsgi;
+  scgi_temp_path        temp/scgi;
+
+  sendfile    on;
+  keepalive_timeout 65;
+  server_tokens off;
+
+  gzip on;
+  gzip_comp_level 5;
+  gzip_min_length 512;
+  gzip_types text/css application/javascript application/json application/manifest+json image/svg+xml font/ttf;
+
+  server {
+    listen 127.0.0.1:__PORT__;
+    server_name localhost;
+    root "__ROOT__";
+    index index.html;
+
+    add_header X-Content-Type-Options nosniff always;
+
+    # Hashed build output never changes: cache for a year.
+    location /assets/ {
+      add_header Cache-Control "public, max-age=31536000, immutable" always;
+      add_header X-Content-Type-Options nosniff always;
+      try_files $uri =404;
+    }
+
+    # The app shell, service worker and manifest must always be revalidated
+    # so a new deploy shows up on the next launch.
+    location ~ ^/(index\.html|sw\.js|manifest\.webmanifest)?$ {
+      add_header Cache-Control "no-cache" always;
+      add_header X-Content-Type-Options nosniff always;
+      try_files $uri /index.html;
+    }
+
+    # Routes are hash-based (#/stage/2), so anything unknown falls back to the app.
+    location / {
+      try_files $uri $uri/ /index.html;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-/* Both fonts ship with the app so it works offline (Electron, installed PWA). */
+/* Both fonts ship with the app so it works offline (installed app, local nginx). */
 @font-face {
   font-family: "Open Sans";
   font-style: normal;

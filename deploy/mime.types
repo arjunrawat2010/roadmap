@@ -1,0 +1,15 @@
+# Minimal MIME map covering everything in dist/. Shipped with the repo so the
+# config works the same with any nginx install.
+types {
+  text/html                  html htm;
+  text/css                   css;
+  application/javascript     js mjs;
+  application/json           json;
+  application/manifest+json  webmanifest;
+  image/png                  png;
+  image/svg+xml              svg;
+  image/x-icon               ico;
+  font/woff2                 woff2;
+  font/ttf                   ttf;
+  text/plain                 txt;
+}

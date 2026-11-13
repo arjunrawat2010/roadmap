@@ -17,24 +17,40 @@ npm run preview   # serve the build
 
 **GitHub Pages:** `.github/workflows/deploy.yml` builds and deploys on every push to `main`. One-time setup: Settings → Pages → Build and deployment → Source: **GitHub Actions**. The site is served at https://arjunrawat2010.github.io/roadmap/.
 
+## Run locally with nginx
+
+One command builds the app and serves it with nginx at **http://localhost:8080/**. Run it again after changes to rebuild and reload.
+
+**Windows:** double-click `deploy\deploy.cmd`, or from a terminal in the repo folder:
+
+```powershell
+deploy\deploy.cmd               # build + start (or reload), opens the browser
+deploy\deploy.cmd -Port 9000    # another port
+deploy\deploy.cmd stop          # stop nginx
+```
+
+The first run downloads nginx for Windows from nginx.org into `.nginx\bin`. It doesn't install anything or need admin rights. If nginx is already on PATH, that copy is used instead.
+
+**macOS / Linux:** install nginx (`brew install nginx` or `sudo apt install nginx`), then:
+
+```bash
+./deploy/deploy.sh               # or: npm run deploy
+PORT=9000 ./deploy/deploy.sh
+./deploy/deploy.sh stop
+```
+
+Everything nginx writes (config, logs, PID) goes in `.nginx/`, which git ignores. To change server settings, edit `deploy/nginx.conf.template`. nginx only listens on `127.0.0.1`, so other machines on your network can't reach it.
+
+If Windows Smart App Control blocks `nginx.exe`, run the Mac/Linux steps inside WSL (Ubuntu) instead: `sudo apt install nginx`, then `./deploy/deploy.sh`. Windows browsers can open WSL's `localhost:8080` directly.
+
 ## Install as a desktop app
 
 The site is an installable web app (PWA), so it runs in its own window with a desktop icon and works offline.
 
-- **Chrome / Edge (Windows, macOS, Linux):** open the site, then click the install icon at the right end of the address bar (or menu → *Cast, save and share* → *Install page as app* in Chrome, or *Apps* → *Install this site as an app* in Edge).
+- **Chrome / Edge (Windows, macOS, Linux):** open the site (GitHub Pages or your local `http://localhost:8080/`), then click the install icon at the right end of the address bar (or menu → *Cast, save and share* → *Install page as app* in Chrome, or *Apps* → *Install this site as an app* in Edge).
 - **Safari (macOS Sonoma or newer):** File → *Add to Dock*.
 
-Updates come in automatically: after a new deploy, the next launch picks up the new version. Progress is shared with the same browser's copy of the site, so installing doesn't lose anything.
-
-## Windows app (.exe)
-
-The app is also packaged with Electron as a Windows desktop program.
-
-- **Download:** grab `Roadmap-Setup-<version>.exe` (installer) or `Roadmap-Portable-<version>.exe` (no install, just run) from the repo's **Releases** page.
-- **New release:** bump `version` in `package.json` and push to `main`. `.github/workflows/release.yml` builds on Windows and, for a version with no release yet, creates the `vX.Y.Z` tag and a GitHub Release with both `.exe` files. Every push also leaves the `.exe` files as a downloadable artifact on the Actions run.
-- **Local build:** `npm run dist:win` on Windows (on macOS/Linux it needs Wine). Output goes to `release/`. `npm run electron` runs the desktop app without packaging. `npm run dist:mac` and `npm run dist:linux` build for those systems.
-
-The `.exe` isn't code-signed, so Windows SmartScreen warns the first time: click **More info → Run anyway**. The desktop app keeps its own progress, separate from the website's.
+Updates come in automatically: after a new deploy, the next launch picks up the new version. Progress is shared with the same browser's copy of that address, so installing doesn't lose anything. The local site and the GitHub Pages site are different addresses, so each keeps its own progress.
 
 ## How it works
 
