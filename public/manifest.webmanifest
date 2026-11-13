@@ -1,0 +1,16 @@
+{
+  "name": "AI Platform Architect Roadmap",
+  "short_name": "Roadmap",
+  "description": "Track a 6-month AI platform architect learning roadmap.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F0F0F0",
+  "theme_color": "#040D17",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

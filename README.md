@@ -17,6 +17,15 @@ npm run preview   # serve the build
 
 **GitHub Pages:** `.github/workflows/deploy.yml` builds and deploys on every push to `main`. One-time setup: Settings → Pages → Build and deployment → Source: **GitHub Actions**. The site is served at https://arjunrawat2010.github.io/roadmap/.
 
+## Install as a desktop app
+
+The site is an installable web app (PWA), so it runs in its own window with a desktop icon and works offline.
+
+- **Chrome / Edge (Windows, macOS, Linux):** open the site, then click the install icon at the right end of the address bar (or menu → *Cast, save and share* → *Install page as app* in Chrome, or *Apps* → *Install this site as an app* in Edge).
+- **Safari (macOS Sonoma or newer):** File → *Add to Dock*.
+
+Updates come in automatically: after a new deploy, the next launch picks up the new version. Progress is shared with the same browser's copy of the site, so installing doesn't lose anything.
+
 ## How it works
 
 - **Data:** stages, resources, certifications and blogs are in `src/data.ts`.
