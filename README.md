@@ -20,11 +20,11 @@ npm run preview   # serve the build
 ## How it works
 
 - **Data:** stages, resources, certifications and blogs are in `src/data.ts`.
-- **State:** every tick, status change, note and repo link is saved in the browser's `localStorage` (`roadmap-state-v1`). The first load fills in the sample progress from the design (Stage 1 done, Stage 2 in progress). Clear that key to start fresh.
+- **State:** every tick, status change, note and repo link is saved in the browser's `localStorage` (`roadmap-state-v2`). A first visit starts at 0%. Progress is kept per browser and device, and is lost if you clear site data.
 - **Progress:** Learn, Resources, Hands-on project and Done when items count toward progress. "Improve it" stretch goals don't.
 - **Dates:** the week number, month and habit dates come from the start date (`START_DATE` in `src/data.ts`) and today's date.
 - **Streak:** the streak counts consecutive weeks with all three Friday-review items ticked.
 - **Theme:** follows the OS light/dark setting. The moon/sun button in the header overrides it.
 - **Layout:** below 900px wide you get the mobile layout with a bottom tab bar.
 
-Sample values to replace: the profile in `PROFILE` (`src/data.ts`), and the seeded notes, repos and hours in `seed()` (`src/store.tsx`).
+Sample values to replace: the profile in `PROFILE` (`src/data.ts`).

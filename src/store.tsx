@@ -55,35 +55,11 @@ export interface Persisted {
   hoursThisWeek: number;
 }
 
-const STORAGE_KEY = 'roadmap-state-v1';
+const STORAGE_KEY = 'roadmap-state-v2';
 
-/** Sample progress from the design: Stage 1 done, Stage 2 in progress. */
+/** Fresh start: nothing ticked, no notes, no streak. */
 function seed(): Persisted {
-  const checks: Record<string, boolean> = {};
-  const all = (n: number) => SECS.forEach((k) => STAGES[n - 1][k].forEach((_, i) => (checks[`${n}.${k}.${i}`] = true)));
-  all(1);
-  checks['1.imp.0'] = true;
-  checks['1.imp.3'] = true;
-  STAGES[1].learn.forEach((_, i) => (checks[`2.learn.${i}`] = true));
-  [0, 1, 2, 3].forEach((i) => (checks[`2.res.${i}`] = true));
-  [0, 1, 2].forEach((i) => (checks[`2.step.${i}`] = true));
-
-  const habits: Record<string, boolean[]> = {};
-  ['2026-10-02', '2026-10-09', '2026-10-16', '2026-10-23', '2026-10-30', '2026-11-06'].forEach((d) => (habits[d] = [true, true, true]));
-  habits['2026-11-13'] = [true, true, false];
-
-  return {
-    checks,
-    habits,
-    over: {},
-    completed: { 1: '2026-10-21' },
-    notes: {
-      1: 'Built Ticket Triage API with FastAPI + Pydantic. Claude: 30/30 schema-valid, ~1.1 s p50. Ollama (llama3.1:8b): 27/30 before retries, 30/30 after; ~4x slower but free. Retry-on-validation-error fixed all failures.',
-      2: 'Ingested 142 runbooks, split by H2. Heading chunks beat fixed 512-token chunks: hit rate 0.71 → 0.84 on the first 30 questions. Refusals are still too eager on short questions.',
-    },
-    repos: { 1: 'github.com/amorgan/ticket-triage-api', 2: 'github.com/amorgan/runbook-copilot' },
-    hoursThisWeek: 7.5,
-  };
+  return { checks: {}, habits: {}, over: {}, completed: {}, notes: {}, repos: {}, hoursThisWeek: 0 };
 }
 
 function load(): Persisted {
