@@ -1,6 +1,7 @@
 // Offline support: the app shell is fetched network-first (so updates show up
 // on the next launch), everything else (hashed JS/CSS, fonts, icons) cache-first.
-const CACHE = 'roadmap-v1';
+// Only same-origin requests are handled; fonts are bundled with the app.
+const CACHE = 'roadmap-v2';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', (e) => {
@@ -19,9 +20,7 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  const sameOrigin = url.origin === self.location.origin;
-  const isFont = url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
-  if (!sameOrigin && !isFont) return;
+  if (url.origin !== self.location.origin) return;
 
   if (req.mode === 'navigate') {
     e.respondWith(
@@ -41,7 +40,7 @@ self.addEventListener('fetch', (e) => {
       (hit) =>
         hit ||
         fetch(req).then((res) => {
-          if (res.ok || res.type === 'opaque') {
+          if (res.ok) {
             const copy = res.clone();
             caches.open(CACHE).then((c) => c.put(req, copy));
           }

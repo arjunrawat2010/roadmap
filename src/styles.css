@@ -1,10 +1,18 @@
-/* Open Sans ships locally; Inter comes from Google Fonts (see index.html). */
+/* Both fonts ship with the app so it works offline (Electron, installed PWA). */
 @font-face {
   font-family: "Open Sans";
   font-style: normal;
   font-weight: 300 800;
   font-display: swap;
   src: url("./assets/OpenSans-VariableFont.ttf") format("truetype-variations");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("./assets/Inter-latin-wght.woff2") format("woff2-variations"), url("./assets/Inter-latin-wght.woff2") format("woff2");
 }
 
 :root {

@@ -26,6 +26,16 @@ The site is an installable web app (PWA), so it runs in its own window with a de
 
 Updates come in automatically: after a new deploy, the next launch picks up the new version. Progress is shared with the same browser's copy of the site, so installing doesn't lose anything.
 
+## Windows app (.exe)
+
+The app is also packaged with Electron as a Windows desktop program.
+
+- **Download:** grab `Roadmap-Setup-<version>.exe` (installer) or `Roadmap-Portable-<version>.exe` (no install, just run) from the repo's **Releases** page.
+- **New release:** bump `version` in `package.json`, then push a matching tag, for example `git tag v1.0.1 && git push origin v1.0.1`. `.github/workflows/release.yml` builds on Windows and attaches both `.exe` files to a GitHub Release.
+- **Local build:** `npm run dist:win` on Windows (on macOS/Linux it needs Wine). Output goes to `release/`. `npm run electron` runs the desktop app without packaging. `npm run dist:mac` and `npm run dist:linux` build for those systems.
+
+The `.exe` isn't code-signed, so Windows SmartScreen warns the first time: click **More info → Run anyway**. The desktop app keeps its own progress, separate from the website's.
+
 ## How it works
 
 - **Data:** stages, resources, certifications and blogs are in `src/data.ts`.

@@ -12,8 +12,8 @@ createRoot(document.getElementById('root')!).render(
   </StrictMode>,
 );
 
-// Installable desktop app + offline support (production builds only).
-if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+// Installable web app + offline support (production web builds only; not needed in Electron).
+if (import.meta.env.PROD && location.protocol !== 'file:' && 'serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js').catch(() => {
       /* offline support is optional */
