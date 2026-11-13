@@ -15,6 +15,8 @@ npm run preview   # serve the build
 
 `dist/` is a static site that works from any path (it uses hash routes like `#/stage/2`), so GitHub Pages, Netlify or any static host will work.
 
+**GitHub Pages:** `.github/workflows/deploy.yml` builds and deploys on every push to `main`. One-time setup: Settings → Pages → Build and deployment → Source: **GitHub Actions**. The site is served at https://arjunrawat2010.github.io/roadmap/.
+
 ## How it works
 
 - **Data:** stages, resources, certifications and blogs are in `src/data.ts`.
